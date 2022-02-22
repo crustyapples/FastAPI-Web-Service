@@ -19,7 +19,6 @@ fake_users_db = {
     "johndoe": {
         "username": "johndoe",
         "full_name": "John Doe",
-        "email": "johndoe@example.com",
         "password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
         "disabled": False,
     }
@@ -38,7 +37,6 @@ class TokenData(BaseModel):
 
 class User(BaseModel):
     username: str
-    email: Optional[str] = None
     full_name: Optional[str] = None
     password: str
     disabled: Optional[bool] = None
@@ -156,8 +154,3 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 @app.get("/user/profile", response_model=User)
 async def read_users_profile(current_user: User = Depends(get_current_active_user)):
     return current_user
-
-
-@app.get("/user/profile/items")
-async def read_own_items(current_user: User = Depends(get_current_active_user)):
-    return [{"item_id": "Foo", "owner": current_user.username}]
